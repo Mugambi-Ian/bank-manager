@@ -17,8 +17,6 @@ import bank.manager.ui.account_transact.DepositMoney;
 import bank.manager.ui.account_transact.SendMoney;
 import bank.manager.ui.account_transact.TransactHome;
 import bank.manager.ui.account_transact.WithdrawMoney;
-import javafx.application.Application;
-import javafx.stage.Stage;
 
 public class Index{
     
