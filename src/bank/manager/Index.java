@@ -1,6 +1,5 @@
 package bank.manager;
 
-
 import bank.manager.ui.home.HomeScreen;
 import java.awt.CardLayout;
 import java.awt.EventQueue;
@@ -18,8 +17,8 @@ import bank.manager.ui.account_transact.SendMoney;
 import bank.manager.ui.account_transact.TransactHome;
 import bank.manager.ui.account_transact.WithdrawMoney;
 
-public class Index{
-    
+public class Index {
+
     private JFrame frame;
     private JPanel activeScreen;
     private HomeScreen homeScreen;
@@ -33,98 +32,104 @@ public class Index{
     private DepositMoney depositMoney;
     private WithdrawMoney withdrawMoney;
     private DatabaseHandler dbHandler;
-    
-    private void syncDb(){
+
+    private void syncDb() {
         frame.dispose();
-        Index.main(new String[]{"Index"});
+        Index.main(new String[] { "Index" });
     }
-    
+
     public Index() {
         dbHandler = new DatabaseHandler();
-        homeScreen= new HomeScreen(new HomeScreen.HomeInterface(){
+        homeScreen = new HomeScreen(new HomeScreen.HomeInterface() {
             @Override
-            public void createAccount(){
+            public void createAccount() {
                 switchScreen(createScreen);
             }
+
             @Override
-            public void removeAccount(){
+            public void removeAccount() {
                 switchScreen(removeAccount);
 
             }
+
             @Override
-            public void findAccount(){
+            public void findAccount() {
                 switchScreen(searchAccount);
 
             }
+
             @Override
-            public void openAccount(){
+            public void openAccount() {
                 switchScreen(openAccount);
 
             }
         });
-        editScreen = new EditScreen(new EditScreen.EditInterface(){
+        editScreen = new EditScreen(new EditScreen.EditInterface() {
             @Override
-            public void onClose(){
+            public void onClose() {
                 switchScreen(searchAccount);
-                
+
             }
+
             @Override
-            public void onSave(Account account){
-                dbHandler.updateRecord(new Account[]{account});
+            public void onSave(Account account) {
+                dbHandler.updateRecord(new Account[] { account });
                 syncDb();
-                
+
             }
-        },dbHandler.database);
+        }, dbHandler.database);
         createScreen = new CreateScreen(new CreateScreen.EditInterFace() {
             @Override
-            public void onClose(){
+            public void onClose() {
                 switchScreen(homeScreen);
-                
+
             }
+
             @Override
-            public void onSave(Account account){
+            public void onSave(Account account) {
                 dbHandler.addRecord(account);
                 syncDb();
             }
-        },dbHandler.database);
-        removeAccount = new RemoveAccount(new RemoveAccount.RemoveInterface(){
-             @Override
-             public void onClose(){
+        }, dbHandler.database);
+        removeAccount = new RemoveAccount(new RemoveAccount.RemoveInterface() {
+            @Override
+            public void onClose() {
                 switchScreen(homeScreen);
-                
+
             }
-             @Override
-            public void onRemove(Account account){
+
+            @Override
+            public void onRemove(Account account) {
                 dbHandler.removeRecord(account);
                 syncDb();
-                
+
             }
-        },dbHandler.database);
-        searchAccount = new FindAccount(new FindAccount.SearchAccountInterface(){
+        }, dbHandler.database);
+        searchAccount = new FindAccount(new FindAccount.SearchAccountInterface() {
             @Override
-            public void onClose(){
-                switchScreen(homeScreen);   
+            public void onClose() {
+                switchScreen(homeScreen);
             }
-            
+
             @Override
-            public void onOpen(Account account){
+            public void onOpen(Account account) {
                 editScreen.setAccount(account);
-                switchScreen(editScreen);                
+                switchScreen(editScreen);
             }
-        },dbHandler.database);
-        openAccount = new OpenAccount(new OpenAccount.OpenAccountInterface(){
+        }, dbHandler.database);
+        openAccount = new OpenAccount(new OpenAccount.OpenAccountInterface() {
             @Override
-            public void onClose(){
-                switchScreen(homeScreen);   
+            public void onClose() {
+                switchScreen(homeScreen);
             }
-            
+
             @Override
-            public void onOpen(Account account){
+            public void onOpen(Account account) {
                 transactHome.setCurrentAccount(account);
-                switchScreen(transactHome); 
+                switchScreen(transactHome);
             }
-        },dbHandler.database);
-        transactHome =new TransactHome(new TransactHome.TransactInterface() {
+        }, dbHandler.database);
+        transactHome = new TransactHome(new TransactHome.TransactInterface() {
             @Override
             public void onClose() {
                 transactHome.currentAccount = null;
@@ -151,8 +156,8 @@ public class Index{
         });
         sendMoney = new SendMoney(new SendMoney.SendInterface() {
             @Override
-            public void onProceed(Account ac1 ,Account ac2) {
-                dbHandler.updateRecord(new Account[]{ac1,ac2});
+            public void onProceed(Account ac1, Account ac2) {
+                dbHandler.updateRecord(new Account[] { ac1, ac2 });
                 syncDb();
             }
 
@@ -163,25 +168,27 @@ public class Index{
         }, dbHandler.database);
         withdrawMoney = new WithdrawMoney(new WithdrawMoney.WithdrawInterface() {
             @Override
-            public void onClose() {                
+            public void onClose() {
                 switchScreen(transactHome);
             }
 
             @Override
             public void onWithdraw(Account current) {
-                dbHandler.updateRecord(new Account[]{current});
-                syncDb();           }
+                dbHandler.updateRecord(new Account[] { current });
+                syncDb();
+            }
         });
-        depositMoney = new DepositMoney(new DepositMoney.DepositInterface(){
-             @Override
-            public void onClose() {                
+        depositMoney = new DepositMoney(new DepositMoney.DepositInterface() {
+            @Override
+            public void onClose() {
                 switchScreen(transactHome);
             }
 
             @Override
             public void onDeposit(Account current) {
-                dbHandler.updateRecord(new Account[]{current});
-                syncDb();           }
+                dbHandler.updateRecord(new Account[] { current });
+                syncDb();
+            }
         });
         editScreen.setVisible(false);
         removeAccount.setVisible(false);
@@ -194,14 +201,14 @@ public class Index{
         withdrawMoney.setVisible(false);
         initialize();
     }
-    
-    private void switchScreen(JPanel jPanel){
+
+    private void switchScreen(JPanel jPanel) {
         activeScreen.setVisible(false);
         jPanel.setVisible(true);
-        activeScreen =jPanel;
+        activeScreen = jPanel;
     }
-    
-     private void initialize(){
+
+    private void initialize() {
         frame = new JFrame();
         frame.setBounds(100, 100, 500, 500);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -217,9 +224,9 @@ public class Index{
         frame.getContentPane().add(sendMoney);
         frame.getContentPane().add(depositMoney);
         frame.getContentPane().add(withdrawMoney);
-        activeScreen=homeScreen;
+        activeScreen = homeScreen;
     }
-    
+
     public static void main(String[] args) {
         EventQueue.invokeLater(() -> {
             try {
@@ -230,5 +237,5 @@ public class Index{
             }
         });
     }
-    
+
 }

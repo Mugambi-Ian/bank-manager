@@ -6,4 +6,3 @@ public class InsufficientFundsException extends Exception {
 		super(m);
 	}
 }
-
